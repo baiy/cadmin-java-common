@@ -20,10 +20,10 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+@Getter
 @Slf4j
 @NoArgsConstructor
 public class FeatureHandlerInterceptor implements HandlerInterceptor {
-    @Getter
     private String apikey = "";
 
     public FeatureHandlerInterceptor(String apikey) {

@@ -1,5 +1,6 @@
 package com.github.baiy.cadmin.common.domain;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
@@ -23,6 +24,19 @@ public class Context {
     private Boolean administrator = false;
     // 为防止信息泄露 这个token不是完整token
     private String token = "";
+
+    public String encode(String apikey) {
+        if (StrUtil.isBlank(apikey)) {
+            throw new RuntimeException("apikey 不能为空");
+        }
+        var context = new Context();
+        BeanUtil.copyProperties(this, context);
+        var transmit = new Transmit();
+        transmit.setTime(System.currentTimeMillis());
+        transmit.setContext(JsonUtil.toJSONString(context));
+        transmit.setSign(transmit.calculateSign(apikey));
+        return Base64.encode(JsonUtil.toJSONString(transmit));
+    }
 
     public static Context decode(HttpServletRequest request, String apikey) {
         if (StrUtil.isBlank(apikey)) {

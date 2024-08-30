@@ -23,7 +23,7 @@ public class FeatureAdvice implements ResponseBodyAdvice<Object> {
 
     @Override
     public boolean supports(
-            MethodParameter returnType,
+            @NonNull MethodParameter returnType,
             @NonNull Class<? extends HttpMessageConverter<?>> converterType
     ) {
         return returnType.hasMethodAnnotation(Admin.class);

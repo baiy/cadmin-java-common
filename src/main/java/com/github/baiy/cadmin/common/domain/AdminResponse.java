@@ -63,10 +63,8 @@ public class AdminResponse {
         AdminResponse instance;
         if (exception instanceof AdminException e) {
             instance = error(e.getMessage(), e.getCode());
-        } else if (exception instanceof RuntimeException) {
-            instance = error(exception.getMessage(), 0);
         } else {
-            instance = error("内部错误");
+            instance = error("系统错误");
         }
         return instance;
     }
