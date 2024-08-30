@@ -5,9 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.baiy</groupId>
-    <artifactId>cadmin-common</artifactId>
+    <artifactId>cadmin-java-common</artifactId>
     <name>${project.artifactId}</name>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>
