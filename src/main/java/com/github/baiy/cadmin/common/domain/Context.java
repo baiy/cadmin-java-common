@@ -20,6 +20,8 @@ public class Context {
     private Long userId = 0L;
     private String username = "";
     private String action = "";
+    // 自定义请求扩展配置
+    private String requestExtendConfig = "";
     private String ip = "";
     private Boolean administrator = false;
     // 为防止信息泄露 这个token不是完整token
@@ -47,11 +49,11 @@ public class Context {
             throw new RuntimeException("上下文信息不能为空");
         }
         var transmit = JsonUtil.parseObject(Base64.decodeStr(content), Transmit.class);
-        if ((System.currentTimeMillis() - transmit.getTime()) > 20 * 1000) {
-            throw new RuntimeException("请求已过期");
+        if ((System.currentTimeMillis() - transmit.getTime()) > 120 * 1000) {
+            throw new RuntimeException("请求无效");
         }
-        if (!transmit.getSign().equals(transmit.calculateSign(apikey))) {
-            throw new RuntimeException("验证失败");
+        if (transmit.getSign() == null || !transmit.getSign().equals(transmit.calculateSign(apikey))) {
+            throw new RuntimeException("请求无效");
         }
         return JsonUtil.parseObject(transmit.getContext(), Context.class);
     }
