@@ -46,6 +46,7 @@ public class FeatureAdvice implements ResponseBodyAdvice<Object> {
         // json 响应
         response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
 
+        // 自定义响应处理器
         var result = responseHandle(body);
         if (result != null) {
             return AdminResponse.success(result);
@@ -61,6 +62,7 @@ public class FeatureAdvice implements ResponseBodyAdvice<Object> {
         return AdminResponse.success(body);
     }
 
+    // 自定义响应处理器
     public Object responseHandle(Object body) {
         return null;
     }
