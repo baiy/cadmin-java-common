@@ -11,7 +11,7 @@ import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.github.baiy.cadmin.common.exception.AdminException;
+import com.github.baiy.cadmin.common.exception.BusinessException;
 import lombok.Getter;
 
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class JsonUtil {
             return objectMapper.readValue(text, new TypeReference<>() {
             });
         } catch (JsonProcessingException e) {
-            throw new AdminException(e.getMessage());
+            throw new BusinessException(e.getMessage());
         }
     }
 
@@ -72,7 +72,7 @@ public class JsonUtil {
             return objectMapper.readValue(text, new TypeReference<>() {
             });
         } catch (JsonProcessingException e) {
-            throw new AdminException(e.getMessage());
+            throw new BusinessException(e.getMessage());
         }
     }
 
@@ -80,7 +80,7 @@ public class JsonUtil {
         try {
             return objectMapper.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            throw new AdminException(e.getMessage());
+            throw new BusinessException(e.getMessage());
         }
     }
 

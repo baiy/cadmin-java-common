@@ -3,11 +3,11 @@ package com.github.baiy.cadmin.common.library;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.DigestUtil;
-import com.github.baiy.cadmin.common.annotation.Admin;
+import com.github.baiy.cadmin.common.annotation.Cadmin;
 import com.github.baiy.cadmin.common.configure.Constants;
-import com.github.baiy.cadmin.common.domain.AdminResponse;
+import com.github.baiy.cadmin.common.domain.CadminResponse;
 import com.github.baiy.cadmin.common.domain.Context;
-import com.github.baiy.cadmin.common.exception.AdminException;
+import com.github.baiy.cadmin.common.exception.BusinessException;
 import com.github.baiy.cadmin.common.helper.JsonUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -38,10 +38,10 @@ public class FeatureHandlerInterceptor implements HandlerInterceptor {
     ) throws Exception {
         try {
             if (!(handler instanceof HandlerMethod)) {
-                throw new AdminException("不支持的请求类型", 10001);
+                throw new BusinessException("不支持的请求类型", 10001);
             }
-            if (!((HandlerMethod) handler).hasMethodAnnotation(Admin.class)) {
-                throw new AdminException("不支持的请求类型", 10002);
+            if (!((HandlerMethod) handler).hasMethodAnnotation(Cadmin.class)) {
+                throw new BusinessException("不支持的请求类型", 10002);
             }
             var context = Context.decode(request, getApikey());
             if (StrUtil.isBlank(context.getTrackId())) {
@@ -57,7 +57,7 @@ public class FeatureHandlerInterceptor implements HandlerInterceptor {
         } catch (Exception e) {
             log.error("解析请求上下文失败:", e);
             response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
-            response.getWriter().write(JsonUtil.toJSONString(AdminResponse.error(e)));
+            response.getWriter().write(JsonUtil.toJSONString(CadminResponse.error(e)));
             return false;
         }
         return true;

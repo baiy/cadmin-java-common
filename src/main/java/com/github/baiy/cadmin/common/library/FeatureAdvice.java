@@ -1,11 +1,11 @@
 package com.github.baiy.cadmin.common.library;
 
-import com.github.baiy.cadmin.common.domain.AdminResponse;
+import com.github.baiy.cadmin.common.domain.CadminResponse;
 import com.github.baiy.cadmin.common.helper.JsonUtil;
 import jakarta.servlet.ServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.MethodParameter;
-import com.github.baiy.cadmin.common.annotation.Admin;
+import com.github.baiy.cadmin.common.annotation.Cadmin;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -26,7 +26,7 @@ public class FeatureAdvice implements ResponseBodyAdvice<Object> {
             @NonNull MethodParameter returnType,
             @NonNull Class<? extends HttpMessageConverter<?>> converterType
     ) {
-        return returnType.hasMethodAnnotation(Admin.class);
+        return returnType.hasMethodAnnotation(Cadmin.class);
     }
 
 
@@ -49,17 +49,17 @@ public class FeatureAdvice implements ResponseBodyAdvice<Object> {
         // 自定义响应处理器
         var result = responseHandle(body);
         if (result != null) {
-            return AdminResponse.success(result);
+            return CadminResponse.success(result);
         }
 
         if (body instanceof String) {
-            return JsonUtil.toJSONString(AdminResponse.success(body));
+            return JsonUtil.toJSONString(CadminResponse.success(body));
         }
-        if (body instanceof AdminResponse) {
+        if (body instanceof CadminResponse) {
             return body;
         }
 
-        return AdminResponse.success(body);
+        return CadminResponse.success(body);
     }
 
     // 自定义响应处理器
@@ -70,18 +70,18 @@ public class FeatureAdvice implements ResponseBodyAdvice<Object> {
     public static class WithExceptionHandler extends FeatureAdvice {
         @ExceptionHandler(Exception.class)
         @ResponseStatus(HttpStatus.OK)
-        public AdminResponse handleException(
+        public CadminResponse handleException(
                 Exception e,
                 HandlerMethod handlerMethod
         ) throws Exception {
-            if (handlerMethod == null || !handlerMethod.hasMethodAnnotation(Admin.class)) {
+            if (handlerMethod == null || !handlerMethod.hasMethodAnnotation(Cadmin.class)) {
                 throw e;
             }
             log.error("cadmin feature exception:", e);
             if (e instanceof MethodArgumentNotValidException) {
-                return AdminResponse.error("请求参数不合法");
+                return CadminResponse.error("请求参数不合法");
             }
-            return AdminResponse.error(e);
+            return CadminResponse.error(e);
         }
     }
 }
